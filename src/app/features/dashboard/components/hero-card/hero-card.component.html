@@ -1,0 +1,31 @@
+<section class="hero-card">
+  <!-- CSS-based plus pattern (replaces brittle inline SVG <pattern>) -->
+  <div class="plus-bg" aria-hidden="true"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge">
+      <svg width="10" height="10" viewBox="0 0 10 10"><circle cx="5" cy="5" r="4" fill="#52C3C2"/></svg>
+      {{ summary?.systemsStatus }} &middot; {{ summary?.systemsDate }}
+    </div>
+    <h1 class="hero-title">Good morning, Nathan.</h1>
+    <p class="hero-sub">
+      You have <strong *ngIf="summary">{{ summary!.inboxItems }} items</strong> waiting in your inbox
+      and <strong *ngIf="summary">{{ summary!.auditsDueToday }} audits</strong> due by end of day.
+      Start where you left off.
+    </p>
+    <div class="hero-actions">
+      <a href="#" class="btn btn-sm btn-white">
+        Open inbox
+        <svg width="12" height="12" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h12M11 5l5 5-5 5"/></svg>
+      </a>
+      <a href="#" class="btn btn-sm btn-outline-white">Resume audit</a>
+    </div>
+  </div>
+
+  <div class="hero-stats" *ngIf="summary">
+    <div class="hero-stat"><div class="n">{{ summary.inboxItems }}</div><div class="l">Inbox items</div></div>
+    <div class="hero-stat"><div class="n">{{ summary.auditsDueToday }}</div><div class="l">Audits due today</div></div>
+    <div class="hero-stat"><div class="n">{{ summary.patientsThisWeek }}</div><div class="l">Patients this week</div></div>
+    <div class="hero-stat"><div class="n">{{ summary.pendingRefundsAmount }}</div><div class="l">Pending refunds</div></div>
+  </div>
+</section>

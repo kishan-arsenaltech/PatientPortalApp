@@ -1,0 +1,20 @@
+<section class="card h-100">
+  <div class="card-header">
+    <div>
+      <h3 class="card-title">Quick links</h3>
+      <p class="card-subtitle">Frequently opened modules, grouped by area.</p>
+    </div>
+    <button class="btn btn-ghost btn-sm">Manage</button>
+  </div>
+  <div class="card-body quick-links-grid">
+    <div class="ql-group" *ngFor="let group of groups">
+      <p class="ql-title">
+        <span [innerHTML]="group.iconSvg | safeHtml"></span>
+        {{ group.title }}
+      </p>
+      <a class="quick-link" [routerLink]="link.href" *ngFor="let link of group.links">
+        <span class="dot"></span>{{ link.label }}
+      </a>
+    </div>
+  </div>
+</section>

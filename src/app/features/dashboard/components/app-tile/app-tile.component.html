@@ -1,0 +1,6 @@
+<a [routerLink]="tile.link" class="app-tile" *ngIf="tile">
+  <div class="tile-icon" [ngClass]="tile.iconClass" [innerHTML]="tile.iconSvg | safeHtml"></div>
+  <h3 class="tile-title">{{ tile.title }}</h3>
+  <p class="tile-desc">{{ tile.description }}</p>
+  <div class="tile-meta" *ngIf="tile.metaHtml" [innerHTML]="tile.metaHtml | safeHtml"></div>
+</a>

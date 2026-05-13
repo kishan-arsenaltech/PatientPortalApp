@@ -1,0 +1,249 @@
+<main class="app-main">
+  <div style="max-width: 1440px; margin: 0 auto;">
+
+    <div class="page-head">
+      <div>
+        <h1 class="page-title">Adherence</h1>
+        <p class="page-subtitle">Find a patient and review their compliance, outreach history, and order status.</p>
+      </div>
+      <div class="hstack">
+        <button class="btn btn-secondary btn-sm">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M10 3v10M5 9l5 5 5-5M3 17h14"/></svg>
+          Export
+        </button>
+        <button class="btn btn-primary btn-sm">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg>
+          New outreach
+        </button>
+      </div>
+    </div>
+
+    <div class="adherence-grid">
+
+      <!-- Sidebar: Saved lists -->
+      <aside class="vstack" style="gap: 18px;">
+        <section class="card">
+          <div class="card-body">
+            <h4 class="section-title">My lists</h4>
+            @for (list of savedLists(); track list.label) {
+              <div class="saved-search" [style.background]="list.active ? 'var(--primary-50)' : 'transparent'">
+                <span class="dot" [style.background]="list.color"></span>
+                <span class="label" [style.font-weight]="list.active ? '600' : '400'" [style.color]="list.active ? 'var(--primary-700)' : 'var(--text)'">
+                  {{ list.label }}
+                </span>
+                <span class="count" *ngIf="list.count">{{ list.count }}</span>
+              </div>
+            }
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-body">
+            <h4 class="section-title">Market snapshot</h4>
+            <div class="vstack" style="gap: 8px;">
+              @for (stat of stats(); track stat.label) {
+                <div class="ad-stat">
+                  <div class="icon" [style.background]="stat.bgColor" [style.color]="stat.colorClass" [innerHTML]="stat.icon | safeHtml">
+                  </div>
+                  <div style="flex:1;">
+                    <div class="n">{{ stat.value }}</div>
+                    <div class="l">{{ stat.label }}</div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        </section>
+      </aside>
+
+      <!-- Main: Search -->
+      <section class="card" style="overflow: visible;">
+        <div class="card-header">
+          <div class="hstack">
+            <div style="width:32px;height:32px;border-radius:8px;background:var(--primary-50);color:var(--primary-700);display:grid;place-items:center;">
+              <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="9" r="5.5"/><path d="M13.5 13.5L17 17"/></svg>
+            </div>
+            <div>
+              <h3 class="card-title">Patient search</h3>
+              <p class="card-subtitle">Search by name, phone, ID, or sales order number.</p>
+            </div>
+          </div>
+          <a href="#" class="link">Advanced search →</a>
+        </div>
+
+        <div class="card-body">
+          <form [formGroup]="searchForm" (ngSubmit)="search()" novalidate>
+            <h4 class="section-title" style="margin-bottom: 12px; color: var(--text); font-size: 12px;">
+              <svg width="12" height="12" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" style="vertical-align:-1px;margin-right:4px;"><circle cx="10" cy="7" r="3"/><path d="M4 17c0-3 2.5-5 6-5s6 2 6 5"/></svg>
+              Patient info
+            </h4>
+            <div class="field-row-3" style="margin-bottom:16px;">
+              <div class="field">
+                <label class="label">First name</label>
+                <input class="input" placeholder="e.g. Roberto" formControlName="firstName">
+              </div>
+              <div class="field">
+                <label class="label">Last name</label>
+                <input class="input" placeholder="e.g. Martinez" formControlName="lastName" [class.invalid]="searchForm.get('lastName')?.invalid && searchForm.get('lastName')?.touched">
+                <div class="field-error" *ngIf="searchForm.get('lastName')?.invalid && searchForm.get('lastName')?.touched">
+                  Last name must be at least 2 characters.
+                </div>
+              </div>
+              <div class="field">
+                <label class="label">DOB</label>
+                <input class="input" type="text" placeholder="MM / DD / YYYY" formControlName="dob">
+              </div>
+            </div>
+            <div class="field-row" style="margin-bottom:20px;">
+              <div class="field">
+                <label class="label">Phone #</label>
+                <div class="input-group">
+                  <span class="icon"><svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 4a2 2 0 012-2h2l2 4-2 2a10 10 0 004 4l2-2 4 2v2a2 2 0 01-2 2A14 14 0 014 4z"/></svg></span>
+                  <input class="input" placeholder="(555) 555-5555" formControlName="phone">
+                </div>
+              </div>
+              <div class="field">
+                <label class="label">Patient ID<span class="optional">optional</span></label>
+                <input class="input mono" placeholder="P-000000" formControlName="patientId">
+              </div>
+            </div>
+
+            <hr class="divider">
+
+            <h4 class="section-title" style="margin-bottom: 12px; color: var(--text); font-size: 12px;">
+              <svg width="12" height="12" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" style="vertical-align:-1px;margin-right:4px;"><rect x="3" y="5" width="14" height="10" rx="1"/><path d="M3 9h14"/></svg>
+              Sales order info
+            </h4>
+            <div class="field-row" style="margin-bottom:20px;">
+              <div class="field">
+                <label class="label">Sales order #</label>
+                <input class="input mono" placeholder="SO-000000" formControlName="salesOrder">
+              </div>
+              <div class="field">
+                <label class="label">Nickname</label>
+                <select class="select" formControlName="nickname">
+                  <option>Any nickname</option>
+                  <option>CPAP Resupply</option>
+                  <option>Oxygen Setup</option>
+                  <option>Diabetic Supplies</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 10px; align-items: center;">
+              <button type="submit" class="btn btn-primary" [disabled]="searchForm.invalid">
+                <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="9" r="5.5"/><path d="M13.5 13.5L17 17"/></svg>
+                Search
+              </button>
+              <button type="button" class="btn btn-ghost" (click)="clear()">Clear</button>
+              <div class="grow"></div>
+              <label class="checkbox">
+                <input type="checkbox" formControlName="includeArchived">
+                <span class="box"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                Include archived patients
+              </label>
+            </div>
+          </form>
+        </div>
+
+        <div class="results-head">
+          <h3>Recent patients</h3>
+          <a href="#" class="link">View all</a>
+        </div>
+
+        <div class="table-responsive" style="padding: 0;">
+          <table class="table" style="border: none; width: 100%;">
+            <thead>
+              <tr>
+                <th (click)="sort('name')" style="cursor:pointer;">
+                  Patient
+                  <span *ngIf="sortColumn() === 'name'">{{ sortDirection() === 'asc' ? '↑' : '↓' }}</span>
+                </th>
+                <th (click)="sort('market')" style="cursor:pointer;">
+                  Market
+                  <span *ngIf="sortColumn() === 'market'">{{ sortDirection() === 'asc' ? '↑' : '↓' }}</span>
+                </th>
+                <th (click)="sort('order')" style="cursor:pointer;">
+                  Last order
+                  <span *ngIf="sortColumn() === 'order'">{{ sortDirection() === 'asc' ? '↑' : '↓' }}</span>
+                </th>
+                <th (click)="sort('comp')" style="cursor:pointer;">
+                  Compliance
+                  <span *ngIf="sortColumn() === 'comp'">{{ sortDirection() === 'asc' ? '↑' : '↓' }}</span>
+                </th>
+                <th (click)="sort('status')" style="cursor:pointer;">
+                  Status
+                  <span *ngIf="sortColumn() === 'status'">{{ sortDirection() === 'asc' ? '↑' : '↓' }}</span>
+                </th>
+                <th style="text-align:right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (p of paginatedPatients(); track p.id) {
+                <tr>
+                  <td>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                      <div style="width:30px;height:30px;border-radius:50%;background:var(--primary-100);color:var(--primary-700);display:grid;place-items:center;font-weight:600;font-size:11px;flex-shrink:0;">
+                        {{ p.initials }}
+                      </div>
+                      <div>
+                        <div style="font-weight:600;">{{ p.name }}</div>
+                        <div class="mono" style="font-size:11.5px;color:var(--primary-600);">{{ p.id }}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>{{ p.market }}</td>
+                  <td>{{ p.order }} · {{ p.orderAge }}</td>
+                  <td>
+                    <div style="display:flex;align-items:center;gap:8px;min-width:120px;">
+                      <div style="flex:1;height:6px;border-radius:3px;background:var(--bg-subtle);overflow:hidden;">
+                        <div style="height:100%;" [style.width.%]="p.comp" [style.background]="getComplianceColor(p.comp)" style="border-radius:3px;"></div>
+                      </div>
+                      <span class="mono" style="font-size:11.5px;">{{ p.comp }}%</span>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="badge" [ngClass]="p.status.cls">
+                      <span class="badge-dot"></span>
+                      {{ p.status.label }}
+                    </span>
+                  </td>
+                  <td style="text-align:right;">
+                    <div class="row-actions" style="justify-content:flex-end;">
+                      <button class="row-action" title="View"><svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 10s3-5 8-5 8 5 8 5-3 5-8 5-8-5-8-5z"/><circle cx="10" cy="10" r="2.5"/></svg></button>
+                      <button class="row-action" title="Edit"><svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M13 4l3 3-9 9H4v-3z"/></svg></button>
+                      <button class="row-action" title="More"><svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><circle cx="4" cy="10" r="1.5"/><circle cx="10" cy="10" r="1.5"/><circle cx="16" cy="10" r="1.5"/></svg></button>
+                    </div>
+                  </td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="6" class="empty-state">
+                    No patients match your filters.
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <div class="dt-bottom" *ngIf="filteredPatients().length > 0">
+          <div class="dt-bottom-left">
+            Showing {{ (currentPage() - 1) * pageSize() + 1 }}–{{ Math.min(currentPage() * pageSize(), filteredPatients().length) }} of {{ filteredPatients().length }} patients
+          </div>
+          <div class="dt-bottom-right">
+            <div class="pagination">
+              <button class="page-btn" [disabled]="currentPage() === 1" (click)="setPage(currentPage() - 1)">‹</button>
+              @for (page of [].constructor(totalPages()); track $index) {
+                <button class="page-btn" [class.active]="currentPage() === ($index + 1)" (click)="setPage($index + 1)">
+                  {{ $index + 1 }}
+                </button>
+              }
+              <button class="page-btn" [disabled]="currentPage() === totalPages()" (click)="setPage(currentPage() + 1)">›</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>

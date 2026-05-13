@@ -1,0 +1,22 @@
+<section class="card h-100">
+  <div class="card-header">
+    <div>
+      <h3 class="card-title">Recent activity</h3>
+      <p class="card-subtitle">Across your teams and queues.</p>
+    </div>
+    <button class="btn btn-ghost btn-sm">View all</button>
+  </div>
+  <div class="card-body activity-feed-body">
+    <div class="activity-row" *ngFor="let item of activities">
+      <div class="activity-avatar" 
+           [style.background]="item.avatarBgColor" 
+           [style.color]="item.avatarTextColor">
+        {{ item.initials }}
+      </div>
+      <div class="activity-body">
+        <div [innerHTML]="item.bodyHtml | safeHtml"></div>
+        <div class="activity-time">{{ item.timeInfo }}</div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,210 @@
+<main class="app-main">
+  <div style="max-width: 1440px; margin: 0 auto;">
+
+    <div class="page-head">
+      <div>
+        <h1 class="page-title">Audit Queue</h1>
+        <p class="page-subtitle">Centralized operations for tracking claim audits, payer responses, and appeal deadlines.</p>
+      </div>
+      <div class="hstack">
+        <button class="btn btn-secondary btn-sm">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M10 3v10M5 9l5 5 5-5M3 17h14"/></svg>
+          Export queue
+        </button>
+        <button class="btn btn-secondary btn-sm">Bulk assign</button>
+        <button class="btn btn-primary btn-sm">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M10 4v12M4 10h12"/></svg>
+          Create audit
+        </button>
+      </div>
+    </div>
+
+    <!-- Summary Strip -->
+    <div class="summary-strip">
+      @for (card of summaryCards(); track card.label) {
+        <div class="summary-card">
+          <div class="label">{{ card.label }}</div>
+          <div class="value">{{ card.value }}</div>
+        </div>
+      }
+    </div>
+
+    <div class="dashboard-grid">
+
+      <!-- LEFT SIDEBAR -->
+      <aside class="vstack" style="gap: 18px;">
+        <!-- Filters -->
+        <section class="card" [formGroup]="filterForm">
+          <div class="card-body">
+            <h4 class="section-title">Queue filters</h4>
+            <div class="vstack" style="gap: 12px;">
+              <div class="field">
+                <label class="label">Status</label>
+                <select class="select" formControlName="status">
+                  <option>All status</option>
+                  <option>Documentation sent</option>
+                  <option>Awaiting payer</option>
+                  <option>Appeal submitted</option>
+                  <option>Overturned</option>
+                  <option>Upheld</option>
+                  <option>Closed</option>
+                </select>
+              </div>
+              <div class="field">
+                <label class="label">Payer</label>
+                <select class="select" formControlName="payer">
+                  <option>All payers</option>
+                  <option>Medicare</option>
+                  <option>BCBS PPO</option>
+                  <option>Aetna</option>
+                  <option>UnitedHealth</option>
+                  <option>Cigna</option>
+                  <option>Humana</option>
+                </select>
+              </div>
+              <div class="field">
+                <label class="label">Assigned reviewer</label>
+                <select class="select" formControlName="reviewer">
+                  <option>All reviewers</option>
+                  <option>Nathan A.</option>
+                  <option>Sarah C.</option>
+                  <option>Mike R.</option>
+                </select>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" formControlName="onlyOverdue">
+                <span class="track"></span>
+                <span>Only overdue</span>
+              </label>
+            </div>
+          </div>
+        </section>
+
+        <!-- KPI Stats -->
+        <section class="card">
+          <div class="card-body">
+            <h4 class="section-title">Queue metrics</h4>
+            <div class="vstack" style="gap: 10px;">
+              @for (stat of stats(); track stat.label) {
+                <div class="stat-block">
+                  <div class="label">{{ stat.label }}</div>
+                  <div class="hstack" style="justify-content: space-between;">
+                    <div class="value" [style.color]="stat.colorClass">{{ stat.value }}</div>
+                    <div class="trend" *ngIf="stat.trend">{{ stat.trend }}</div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        </section>
+
+        <!-- Saved Views -->
+        <section class="card">
+          <div class="card-body">
+            <h4 class="section-title">Saved views</h4>
+            <div class="vstack" style="gap: 4px;">
+              @for (view of savedViews; track view.label) {
+                <div class="saved-view" [class.active]="view.active">
+                  <span class="label">{{ view.label }}</span>
+                  <span class="count" *ngIf="view.count">{{ view.count }}</span>
+                </div>
+              }
+            </div>
+          </div>
+        </section>
+      </aside>
+
+      <!-- RIGHT MAIN CONTENT -->
+      <section class="card">
+        <div class="card-header" style="justify-content: flex-start; gap: 16px;">
+          <div class="search-wrap" [formGroup]="filterForm">
+            <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="9" r="5.5"/><path d="M13.5 13.5L17 17"/></svg>
+            <input type="text" placeholder="Search by ID, Patient or Invoice…" formControlName="search">
+          </div>
+          <div class="hstack" style="gap: 6px;">
+            <span class="badge">Medicare <button class="close">×</button></span>
+            <span class="badge">Overdue <button class="close">×</button></span>
+          </div>
+        </div>
+
+        <div class="table-responsive" style="padding: 0;">
+          <table class="table" style="border: none; width: 100%;">
+            <thead>
+              <tr>
+                <th><input type="checkbox"></th>
+                <th (click)="sort('id')" style="cursor:pointer;">Audit ID</th>
+                <th (click)="sort('patientName')" style="cursor:pointer;">Patient</th>
+                <th>Invoice #</th>
+                <th>Payer</th>
+                <th>Assigned</th>
+                <th (click)="sort('amount')" style="cursor:pointer;">Amount</th>
+                <th (click)="sort('deadline')" style="cursor:pointer;">Deadline</th>
+                <th>Status</th>
+                <th>Risk</th>
+                <th style="text-align:right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (a of paginatedAudits(); track a.id) {
+                <tr [class.overdue]="a.isOverdue">
+                  <td><input type="checkbox"></td>
+                  <td class="mono" style="color: var(--primary-600);">{{ a.id }}</td>
+                  <td>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                      <div class="avatar-sm">{{ a.initials }}</div>
+                      <div>
+                        <div style="font-weight:600; font-size:13px;">{{ a.patientName }}</div>
+                        <div class="mono" style="font-size:11px; color:var(--text-subtle);">{{ a.patientId }}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="mono" style="font-size:12px;">{{ a.invoiceNum }}</td>
+                  <td style="font-size:12px;">{{ a.payer }}</td>
+                  <td style="font-size:12px;">{{ a.assignedTo }}</td>
+                  <td style="font-weight:500;">{{ a.amount | currency }}</td>
+                  <td>
+                    <div [class.text-danger]="a.isOverdue" style="font-size:12px; display:flex; align-items:center; gap:4px;">
+                      <svg *ngIf="a.isOverdue" width="12" height="12" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 5v6M10 14h.01"/><circle cx="10" cy="10" r="8"/></svg>
+                      {{ a.deadline | date:'MM-dd-yyyy' }}
+                    </div>
+                  </td>
+                  <td>
+                    <span class="badge" [ngClass]="getStatusClass(a.status)">{{ a.status }}</span>
+                  </td>
+                  <td>
+                    <span class="badge" [ngClass]="getRiskClass(a.risk)">{{ a.risk }}</span>
+                  </td>
+                  <td style="text-align:right;">
+                    <div class="row-actions" style="justify-content:flex-end;">
+                      <button class="row-action" title="View audit"><svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 10s3-5 8-5 8 5 8 5-3 5-8 5-8-5-8-5z"/><circle cx="10" cy="10" r="2.5"/></svg></button>
+                      <button class="row-action" title="More"><svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><circle cx="4" cy="10" r="1.5"/><circle cx="10" cy="10" r="1.5"/><circle cx="16" cy="10" r="1.5"/></svg></button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="dt-bottom">
+          <div class="dt-bottom-left">
+            Showing {{ (currentPage() - 1) * pageSize() + 1 }}–{{ Math.min(currentPage() * pageSize(), filteredAudits().length) }} of {{ filteredAudits().length }} audits
+          </div>
+          <div class="dt-bottom-right">
+            <div class="pagination">
+              <button class="page-btn" [disabled]="currentPage() === 1" (click)="setPage(currentPage() - 1)">‹</button>
+              @for (page of [].constructor(totalPages()); track $index) {
+                <button class="page-btn" [class.active]="currentPage() === ($index + 1)" (click)="setPage($index + 1)">
+                  {{ $index + 1 }}
+                </button>
+              }
+              <button class="page-btn" [disabled]="currentPage() === totalPages()" (click)="setPage(currentPage() + 1)">›</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+  </div>
+</main>
