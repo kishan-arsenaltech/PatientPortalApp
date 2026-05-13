@@ -1,0 +1,130 @@
+<section class="inbox-detail" *ngIf="item">
+  <div class="detail-tabs">
+    <span *ngFor="let tab of tabs" 
+          class="detail-tab" 
+          [class.active]="tab.active"
+          (click)="selectTab.emit(tab.label)">
+      {{ tab.label }}
+      <span *ngIf="tab.count" class="badge" style="height:18px;padding:0 6px;font-size:10px;margin-left:4px;">{{ tab.count }}</span>
+    </span>
+  </div>
+
+  <div class="detail-head">
+    <div class="crumbs">
+      Intake 
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M4 2l3 3-3 3"/></svg> 
+      New Faxes 
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M4 2l3 3-3 3"/></svg> 
+      FAX-{{ item.id }}
+    </div>
+    <h1>
+      {{ item.title }} — Martinez, R.
+      <span *ngIf="item.isActionRequired" class="badge badge-warning">Action needed</span>
+    </h1>
+    <div class="detail-meta-row">
+      <span class="mono" style="color: var(--primary-600);">FAX-{{ item.id }}</span>
+      <span class="sep">·</span>
+      <span>Received <strong style="color: var(--text);">01-29-2026 01:44 PM</strong></span>
+      <span class="sep">·</span>
+      <span>From <strong style="color: var(--text);">{{ item.who }}</strong></span>
+      <span class="sep">·</span>
+      <span>3 pages</span>
+    </div>
+    <div style="display: flex; gap: 8px; margin-top: 14px;">
+      <button class="btn btn-primary btn-sm">
+        <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 10h12M11 5l5 5-5 5"/></svg>
+        Work this item
+      </button>
+      <button class="btn btn-secondary btn-sm">Assign</button>
+      <button class="btn btn-secondary btn-sm">
+        <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 4h8l4 4v8H4z"/><path d="M12 4v4h4"/></svg>
+        Create order
+      </button>
+      <button class="btn btn-ghost btn-sm">
+        <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="4" cy="10" r="1.5"/><circle cx="10" cy="10" r="1.5"/><circle cx="16" cy="10" r="1.5"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="detail-body">
+    <div class="doc-viewer">
+      <div class="doc-toolbar">
+        <button class="icon-btn" style="width:28px;height:28px;"><svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5L7 10l5 5"/></svg></button>
+        <span>Page 1 of 3</span>
+        <button class="icon-btn" style="width:28px;height:28px;"><svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8 5l5 5-5 5"/></svg></button>
+        <div class="grow"></div>
+        <button class="icon-btn" style="width:28px;height:28px;" aria-label="Zoom out"><svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 10h10"/></svg></button>
+        <span>100%</span>
+        <button class="icon-btn" style="width:28px;height:28px;" aria-label="Zoom in"><svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 5v10M5 10h10"/></svg></button>
+        <button class="icon-btn" style="width:28px;height:28px;"><svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M10 3v10M5 9l5 5 5-5M3 17h14"/></svg></button>
+      </div>
+      <div class="page-doc">
+        <div class="doc-placeholder" aria-label="Document placeholder">
+          <span class="doc-placeholder-label">Fax page 1</span>
+          <div class="line thick"></div>
+          <div class="line"></div>
+          <div class="line short"></div>
+          <div style="height:8px;"></div>
+          <div class="line"></div>
+          <div class="line short"></div>
+          <div class="line"></div>
+          <div class="hole"></div>
+        </div>
+      </div>
+    </div>
+
+    <aside class="detail-side">
+      <div class="side-card">
+        <h4>Patient</h4>
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+          <div style="width:40px;height:40px;border-radius:50%;background:var(--primary-100);color:var(--primary-700);display:grid;place-items:center;font-weight:600;">RM</div>
+          <div>
+            <div style="font-weight:600; font-size:14px;">Roberto Martinez</div>
+            <div style="font-size:12px; color:var(--text-muted);">DOB 03-14-1961 · Male</div>
+          </div>
+        </div>
+        <dl class="kv">
+          <dt>Patient ID</dt><dd class="mono">P-284117</dd>
+          <dt>Phone</dt><dd>(512) 555-0182</dd>
+          <dt>Market</dt><dd>Austin, TX</dd>
+          <dt>Insurance</dt><dd>BCBS · PPO</dd>
+        </dl>
+      </div>
+
+      <div class="side-card">
+        <h4>Order details</h4>
+        <dl class="kv">
+          <dt>Type</dt><dd>CPAP Supplies</dd>
+          <dt>HCPCS</dt><dd class="mono">A7030, A7031</dd>
+          <dt>Last RS</dt><dd>2 months ago</dd>
+          <dt>Next due</dt><dd style="color: color-mix(in oklch, var(--warning) 50%, black); font-weight: 500;">Overdue by 11 days</dd>
+        </dl>
+      </div>
+
+      <div class="side-card">
+        <h4>Assignment</h4>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div class="avatar" style="width:32px;height:32px;border-radius:50%;background:var(--brand-gradient);color:white;font-weight:600;font-size:12px;display:grid;place-items:center;">NA</div>
+          <div>
+            <div style="font-weight:500; font-size:13px;">Nathan A..</div>
+            <div style="font-size:11.5px; color:var(--text-muted);">You · Intake team</div>
+          </div>
+        </div>
+        <hr class="divider" style="margin: 12px 0;">
+        <label class="toggle" style="margin-bottom:8px;">
+          <input type="checkbox" checked>
+          <span class="track"></span>
+          <span>Send patient SMS on approval</span>
+        </label>
+        <label class="toggle">
+          <input type="checkbox">
+          <span class="track"></span>
+          <span>Flag as priority</span>
+        </label>
+      </div>
+    </aside>
+  </div>
+</section>
+<div class="empty-state" *ngIf="!item">
+  <p>Select an item to view details</p>
+</div>

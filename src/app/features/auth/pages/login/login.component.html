@@ -1,0 +1,196 @@
+<div class="login-page">
+  <!-- Hero / brand panel -->
+  <aside class="login-hero">
+    <svg class="plus-grid" viewBox="0 0 400 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <defs>
+        <pattern id="plus-p" x="0" y="0" width="56" height="56" patternUnits="userSpaceOnUse">
+          <path d="M26 18h4v8h8v4h-8v8h-4v-8h-8v-4h8z" fill="white" opacity="0.6" />
+        </pattern>
+      </defs>
+      <rect width="400" height="600" fill="url(#plus-p)" />
+    </svg>
+
+    <div class="login-hero-content">
+      <a href="#" class="ah-logo" style="margin-bottom: 0;">
+        <!-- We use a local assets path. Ideally we should have an image, but we leave it as is or change to placeholder if not found -->
+        <span style="font-size: 24px; font-weight: bold; filter: brightness(0) invert(1);">Patient Portal</span>
+      </a>
+    </div>
+
+    <div class="login-hero-content">
+      <div class="badge-row" style="margin-bottom: 22px;">
+        <span class="chip">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.2" />
+            <path d="M4 6l1.5 1.5L8 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"
+              stroke-linejoin="round" />
+          </svg>
+          HIPAA-compliant
+        </span>
+        <span class="chip">SOC 2 Type II</span>
+        <span class="chip">SSO ready</span>
+      </div>
+      <h1>The patient care portal that works the way you do.</h1>
+      <p>Intake, adherence, audits, and billing - one workspace for every clinician, coordinator, and biller across
+        Patient Portal.</p>
+
+      <div class="stat-grid">
+        <div class="stat">
+          <div class="n">4.2M</div>
+          <div class="l">Active patients</div>
+        </div>
+        <div class="stat">
+          <div class="n">700+</div>
+          <div class="l">Branch locations</div>
+        </div>
+        <div class="stat">
+          <div class="n">99.98%</div>
+          <div class="l">Portal uptime</div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      style="position: relative; z-index: 1; display: flex; align-items: center; gap: 14px; font-size: 12px; opacity: 0.85;">
+      <span>© 2026 Patient Portal</span>
+      <span style="opacity: 0.5;">·</span>
+      <a href="#" style="color: inherit; text-decoration: none;">Status</a>
+      <span style="opacity: 0.5;">·</span>
+      <a href="#" style="color: inherit; text-decoration: none;">Security</a>
+    </div>
+  </aside>
+
+  <!-- Form -->
+  <main class="login-form-wrap">
+    <div class="login-corner">
+      <button class="icon-btn theme-toggle" aria-label="Toggle theme"></button>
+    </div>
+
+    <div class="login-box">
+      <a href="#" class="ah-logo">
+        <span
+          style="font-size: 24px; font-weight: bold; margin-bottom: 40px; display: block; color: var(--brand-navy);">Patient
+          Portal</span>
+      </a>
+
+      <h2 class="login-heading">Welcome back</h2>
+      <p class="login-sub">Sign in to your Patient Portal workspace to continue.</p>
+
+      <!-- Alert for general errors -->
+      <div *ngIf="errorMessage()" class="alert alert-danger" style="margin-bottom: 20px;">
+        <span class="icon">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6">
+            <circle cx="10" cy="10" r="9" />
+            <path d="M10 6v4M10 14h.01" stroke-linecap="round" />
+          </svg>
+        </span>
+        <div>
+          <h3 class="title">Sign in failed</h3>
+          <p class="msg">{{ errorMessage() }}</p>
+        </div>
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+
+        <div class="field" style="margin-bottom: 14px;"
+          [class.has-error]="f['username'].invalid && (f['username'].dirty || f['username'].touched)">
+          <label class="label" for="username">Email or username<span class="req">*</span></label>
+          <div class="input-group">
+            <span class="icon">
+              <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6">
+                <path d="M3 6l7 5 7-5M3 5h14a1 1 0 011 1v9a1 1 0 01-1 1H3a1 1 0 01-1-1V6a1 1 0 011-1z"
+                  stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </span>
+            <input class="input" id="username" type="text" formControlName="username" autocomplete="username"
+              placeholder="nathan@patientportal.com">
+          </div>
+          <div class="field-error" *ngIf="f['username'].invalid && (f['username'].dirty || f['username'].touched)">
+            <span *ngIf="f['username'].errors?.['required']">Email or username is required</span>
+          </div>
+        </div>
+
+        <div class="field" style="margin-bottom: 14px;"
+          [class.has-error]="f['password'].invalid && (f['password'].dirty || f['password'].touched)">
+          <label class="label" for="password">Password<span class="req">*</span></label>
+          <div class="input-group">
+            <span class="icon">
+              <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6">
+                <rect x="4" y="9" width="12" height="8" rx="1.5" stroke-linecap="round" />
+                <path d="M7 9V6a3 3 0 116 0v3" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </span>
+            <input class="input" id="password" [type]="showPassword() ? 'text' : 'password'" formControlName="password"
+              autocomplete="current-password" placeholder="••••••••">
+            <button type="button" class="icon-btn" (click)="togglePasswordVisibility()"
+              style="position:absolute;right:4px;top:50%;transform:translateY(-50%);width:30px;height:30px;">
+              <svg *ngIf="!showPassword()" width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor"
+                stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 10s3-5 8-5 8 5 8 5-3 5-8 5-8-5-8-5z" />
+                <circle cx="10" cy="10" r="2.5" />
+              </svg>
+              <svg *ngIf="showPassword()" width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor"
+                stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M17.94 17.94A10.07 10.07 0 0110 20c-7 0-10-10-10-10a18.56 18.56 0 014.12-4.94M9.9 4.24A9.12 9.12 0 0110 4c7 0 10 10 10 10a18.2 18.2 0 01-2.16 3.19M1 1l18 18M9.9 9.9a3 3 0 004.2 4.2" />
+              </svg>
+            </button>
+          </div>
+          <div class="field-error" *ngIf="f['password'].invalid && (f['password'].dirty || f['password'].touched)">
+            <span *ngIf="f['password'].errors?.['required']">Password is required</span>
+            <span *ngIf="f['password'].errors?.['minlength']">Password must be at least 8 characters</span>
+          </div>
+        </div>
+
+        <div class="help-row">
+          <label class="checkbox">
+            <input type="checkbox" formControlName="rememberMe">
+            <span class="box"><svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                <path d="M2 5l2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg></span>
+            <span>Keep me signed in for 14 days</span>
+          </label>
+          <a href="#" class="link">Forgot password?</a>
+        </div>
+
+        <button class="btn btn-primary btn-lg" style="width:100%; margin-top: 6px;" type="submit"
+          [disabled]="isLoading() || loginForm.invalid">
+          <ng-container *ngIf="!isLoading()">
+            Sign in
+            <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8 3H5a1 1 0 00-1 1v12a1 1 0 001 1h3M13 14l3-4-3-4M16 10H8" />
+            </svg>
+          </ng-container>
+          <ng-container *ngIf="isLoading()">
+            <svg class="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              style="animation: spin 1s linear infinite;">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" stroke-opacity="0.25" />
+              <path fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+            </svg>
+            Signing in...
+          </ng-container>
+        </button>
+
+        <div class="divider-or">or continue with</div>
+
+        <button type="button" class="sso-btn" [disabled]="isLoading()">
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+            <rect x="2" y="2" width="7.5" height="7.5" fill="#F25022" />
+            <rect x="10.5" y="2" width="7.5" height="7.5" fill="#7FBA00" />
+            <rect x="2" y="10.5" width="7.5" height="7.5" fill="#00A4EF" />
+            <rect x="10.5" y="10.5" width="7.5" height="7.5" fill="#FFB900" />
+          </svg>
+          Continue with Microsoft SSO
+        </button>
+      </form>
+
+      <p class="legal">
+        New to Patient Portal? Your administrator must provision your account.<br>
+        <a href="#" class="link">Contact IT support</a>
+      </p>
+    </div>
+  </main>
+</div>

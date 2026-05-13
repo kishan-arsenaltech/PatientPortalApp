@@ -1,0 +1,88 @@
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { LayoutService } from '../../services/layout.service';
+import { ThemeService } from '../../services/theme.service';
+import { ModalService } from '../../../shared/components/modal/modal.service';
+import { NotificationService } from '../../../shared/components/notification-panel/notification.service';
+
+@Component({
+  selector: 'app-header',
+  standalone: true,
+  imports: [CommonModule],
+  template: `
+    <header class="app-header">
+      <button class="icon-btn sidebar-toggle" aria-label="Pin sidebar" (click)="layoutService.toggleSidebar()">
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
+          <path d="M3 5h14M3 10h14M3 15h14"/>
+        </svg>
+      </button>
+      
+      <button class="mobile-menu-btn" aria-label="Open navigation" (click)="layoutService.toggleMobileSidebar()">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <path d="M3 5h14M3 10h14M3 15h14"/>
+        </svg>
+      </button>
+      
+      <div class="header-search">
+        <span class="search-icon">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
+            <circle cx="9" cy="9" r="5.5"/><path d="M13.5 13.5L17 17"/>
+          </svg>
+        </span>
+        <input type="text" placeholder="Search patients, sales orders, invoices, tasks…">
+        <kbd>⌘K</kbd>
+      </div>
+      
+      <div class="header-actions">
+        <button class="btn btn-brand btn-sm" (click)="modalService.open('ask-portal')">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M10 2l1.8 4.2L16 8l-4.2 1.8L10 14l-1.8-4.2L4 8l4.2-1.8z"/>
+          </svg>
+          Ask Portal
+        </button>
+        
+        <button class="icon-btn" aria-label="Notifications" (click)="notificationService.showNext()">
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 8a5 5 0 0110 0v4l1.5 2h-13L5 12z"/><path d="M8 16a2 2 0 004 0"/>
+          </svg>
+          <span class="dot"></span>
+        </button>
+        
+        <button class="icon-btn theme-toggle" aria-label="Toggle theme" (click)="themeService.toggleTheme()">
+          <!-- Light Theme Icon -->
+          <svg *ngIf="themeService.currentTheme() === 'light'" viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 11.5A6.5 6.5 0 119.5 5a5 5 0 006.5 6.5z"/>
+          </svg>
+          <!-- Dark Theme Icon -->
+          <svg *ngIf="themeService.currentTheme() === 'dark'" viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="10" cy="10" r="4"/><path d="M10 2v2M10 16v2M2 10h2M16 10h2M4.2 4.2l1.4 1.4M14.4 14.4l1.4 1.4M4.2 15.8l1.4-1.4M14.4 5.6l1.4-1.4"/>
+          </svg>
+        </button>
+        
+        <button class="icon-btn" aria-label="Help">
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round">
+            <circle cx="10" cy="10" r="7"/><path d="M8 8a2 2 0 114 0c0 1.2-2 1.4-2 3M10 14.5v.5"/>
+          </svg>
+        </button>
+        
+        <div class="user-chip">
+          <div class="avatar">NA</div>
+          <span class="name">Nathan A.</span>
+          <span class="chev">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+              <path d="M3 4.5l3 3 3-3"/>
+            </svg>
+          </span>
+        </div>
+      </div>
+    </header>
+  `
+})
+export class HeaderComponent {
+  constructor(
+    public layoutService: LayoutService,
+    public themeService: ThemeService,
+    public modalService: ModalService,
+    public notificationService: NotificationService
+  ) {}
+}

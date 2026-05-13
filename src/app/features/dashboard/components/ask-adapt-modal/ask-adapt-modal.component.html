@@ -1,0 +1,45 @@
+<div *ngIf="isOpen()" class="modal-backdrop" (click)="onBackdropClick($event)" role="dialog" aria-modal="true" aria-label="Ask Adapt">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-title-area">
+        <div class="brand-icon-box">
+          <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M10 2l1.8 4.2L16 8l-4.2 1.8L10 14l-1.8-4.2L4 8l4.2-1.8z"/>
+          </svg>
+        </div>
+        <h3 class="modal-title">Ask Adapt</h3>
+        <span class="badge badge-primary">Beta</span>
+      </div>
+      <button class="icon-btn" (click)="close()" aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <path d="M5 5l10 10M15 5L5 15"/>
+        </svg>
+      </button>
+    </div>
+    
+    <div class="modal-body">
+      <p class="modal-description">Ask a question about a patient, claim, or policy. Adapt searches across your connected data.</p>
+      <div class="field">
+        <div class="input-group">
+          <span class="icon">
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+              <path d="M10 2l1.8 4.2L16 8l-4.2 1.8L10 14l-1.8-4.2L4 8l4.2-1.8z"/>
+            </svg>
+          </span>
+          <input class="input query-input" [formControl]="queryControl" placeholder="e.g. How many CPAP pickups are overdue in Texas this week?" (keydown.enter)="submitQuery()">
+        </div>
+      </div>
+      <div class="suggested-queries">
+        <button class="badge query-chip" (click)="setQuery('Recent referrals')">📋 Recent referrals</button>
+        <button class="badge query-chip" (click)="setQuery('Refund status')">💰 Refund status</button>
+        <button class="badge query-chip" (click)="setQuery('Patient on hold')">📞 Patient on hold</button>
+        <button class="badge query-chip" (click)="setQuery('Market variance')">📊 Market variance</button>
+      </div>
+    </div>
+    
+    <div class="modal-footer">
+      <button class="btn btn-ghost" (click)="close()">Cancel</button>
+      <button class="btn btn-brand" (click)="submitQuery()" [disabled]="!queryControl.value">Ask Adapt</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,61 @@
+<section class="inbox-list">
+  <div class="inbox-toolbar">
+    <div class="title-row">
+      <h2>My Inbox</h2>
+      <span class="badge badge-primary">231</span>
+    </div>
+    <button class="btn btn-secondary btn-sm" (click)="openFilters.emit()">
+      <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 5h14M5 10h10M8 15h4"/></svg>
+      Filters <span class="badge" style="height:16px;padding:0 6px;font-size:10px;">3</span>
+    </button>
+    <button class="icon-btn" aria-label="Options">
+      <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor"><circle cx="4" cy="10" r="1.5"/><circle cx="10" cy="10" r="1.5"/><circle cx="16" cy="10" r="1.5"/></svg>
+    </button>
+  </div>
+
+  <div class="inbox-filters">
+    <span *ngFor="let filter of filters" 
+          class="filter-pill" 
+          [class.active]="filter.active"
+          (click)="selectFilter(filter.label)">
+      {{ filter.label }} <span *ngIf="filter.count > 0" class="count">{{ filter.count }}</span>
+    </span>
+  </div>
+
+  <div class="inbox-items">
+    <div *ngFor="let item of items" 
+         class="inbox-item" 
+         [class.unread]="item.unread" 
+         [class.active]="item.id === selectedId"
+         (click)="selectItem.emit(item.id)">
+      <span class="unread-dot"></span>
+      <div>
+        <div class="title">
+          <span class="mono">FAX-{{ item.id }}</span>
+          <span *ngIf="item.tagLabel" class="badge" [ngClass]="getBadgeClass(item.tag)" style="height:18px;padding:0 7px;font-size:10.5px;">
+            {{ item.tagLabel }}
+          </span>
+          <span>{{ item.title }}</span>
+        </div>
+        <p class="snippet">{{ item.who }} · {{ item.snippet }}</p>
+      </div>
+      <div class="meta">
+        <span class="time">{{ item.time }}</span>
+        <span *ngIf="item.isActionRequired" class="badge-dot" style="background:var(--danger);width:8px;height:8px;border-radius:50%;"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="inbox-pagination">
+    <span>Showing <strong style="color:var(--text);">1–14</strong> of 231</span>
+    <div class="page-btns">
+      <button class="page-btn">‹</button>
+      <button class="page-btn active">1</button>
+      <button class="page-btn">2</button>
+      <button class="page-btn">3</button>
+      <button class="page-btn">4</button>
+      <button class="page-btn">5</button>
+      <button class="page-btn">›</button>
+    </div>
+  </div>
+</section>
