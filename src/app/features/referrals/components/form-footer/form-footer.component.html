@@ -1,0 +1,35 @@
+<footer class="form-footer" role="contentinfo" aria-label="Form actions">
+  <div class="status">
+    <span *ngIf="requiredFieldsRemaining > 0">
+      {{ requiredFieldsRemaining }} required field{{ requiredFieldsRemaining !== 1 ? 's' : '' }} remaining
+    </span>
+    <span *ngIf="requiredFieldsRemaining === 0">
+      All required fields complete
+    </span>
+  </div>
+
+  <div class="actions" style="margin-left: auto; display: flex; gap: 8px;">
+    <button
+      type="button"
+      class="btn btn-ghost"
+      (click)="cancel.emit()"
+      [disabled]="isSubmitting">
+      Cancel
+    </button>
+    <button
+      type="button"
+      class="btn btn-secondary"
+      (click)="saveDraft.emit()"
+      [disabled]="isSubmitting || isSaving">
+      {{ isSaving ? 'Saving…' : 'Save draft' }}
+    </button>
+    <button
+      type="submit"
+      class="btn btn-primary"
+      (click)="submitForm.emit()"
+      [disabled]="isSubmitting || isSaving">
+      <span *ngIf="!isSubmitting">Submit referral</span>
+      <span *ngIf="isSubmitting">Submitting…</span>
+    </button>
+  </div>
+</footer>

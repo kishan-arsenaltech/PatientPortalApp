@@ -1,0 +1,6 @@
+<div class="chip-group" role="group" [attr.aria-label]="groupLabel">
+    <button *ngFor="let option of options" type="button" class="chip-select" [class.active]="isSelected(option.value)"
+        [disabled]="isDisabled || null" (click)="select(option.value)" [attr.aria-pressed]="isSelected(option.value)">
+        {{ option.label }}
+    </button>
+</div>

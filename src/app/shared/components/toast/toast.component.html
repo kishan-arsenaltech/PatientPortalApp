@@ -1,0 +1,15 @@
+<div class="toast-container" *ngIf="toastService.toasts().length > 0">
+    <div *ngFor="let toast of toastService.toasts()" class="toast toast-{{ toast.type }}" role="status">
+        <span class="toast-icon" [innerHTML]="getIcon(toast.type)"></span>
+        <div class="toast-body">
+            <p class="toast-title">{{ toast.title }}</p>
+            <p class="toast-msg">{{ toast.message }}</p>
+        </div>
+        <button class="toast-close" aria-label="Dismiss" (click)="toastService.remove(toast.id)">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6"
+                stroke-linecap="round">
+                <path d="M3 3l6 6M9 3L3 9" />
+            </svg>
+        </button>
+    </div>
+</div>

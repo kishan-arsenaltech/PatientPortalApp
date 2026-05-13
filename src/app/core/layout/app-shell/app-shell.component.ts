@@ -11,27 +11,14 @@ import { NotificationPanelComponent } from '../../../shared/components/notificat
   selector: 'app-shell',
   standalone: true,
   imports: [
-    CommonModule, 
-    RouterModule, 
-    SidebarComponent, 
-    HeaderComponent, 
+    CommonModule,
+    RouterModule,
+    SidebarComponent,
+    HeaderComponent,
     TabsComponent,
     ToastComponent,
     NotificationPanelComponent
   ],
-  template: `
-    <div class="app-shell">
-      <app-sidebar></app-sidebar>
-      <app-header></app-header>
-      <app-tabs></app-tabs>
-      <main class="app-main">
-        <div class="app-main-content">
-          <router-outlet></router-outlet>
-        </div>
-      </main>
-    </div>
-    <app-toast></app-toast>
-    <app-notification-panel></app-notification-panel>
-  `
+  templateUrl: './app-shell.component.html'
 })
-export class AppShellComponent {}
+export class AppShellComponent { }

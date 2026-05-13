@@ -1,0 +1,8 @@
+/* Form footer component specific styles */
+.form-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-top: 1px solid var(--border-color, #e2e8f0);
+}

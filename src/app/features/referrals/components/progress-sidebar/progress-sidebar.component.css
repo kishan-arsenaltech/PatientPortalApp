@@ -1,0 +1,18 @@
+/* Progress sidebar component specific styles */
+.progress-sidebar {
+  padding: 1.5rem;
+  background: var(--bg-surface, #ffffff);
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-color, #e2e8f0);
+}
+
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 0.75rem 0;
+}
+
+.step--active {
+  color: var(--primary-color, #3b82f6);
+}

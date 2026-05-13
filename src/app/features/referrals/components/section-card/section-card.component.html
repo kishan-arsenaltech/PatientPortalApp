@@ -1,0 +1,12 @@
+<section class="section-card" [id]="anchorId">
+    <header class="section-head">
+        <span class="n" aria-hidden="true">{{ sectionNumber }}</span>
+        <div>
+            <h3>{{ title }}</h3>
+            <p>{{ subtitle }}</p>
+        </div>
+    </header>
+    <div class="section-body">
+        <ng-content />
+    </div>
+</section>

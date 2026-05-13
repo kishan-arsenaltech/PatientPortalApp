@@ -1,0 +1,342 @@
+<div class="referral-page">
+
+  <!-- Page Header -->
+  <app-page-header
+    title="New referral"
+    subtitle="Capture patient, order, and insurance details — we'll route it to the right branch."
+    breadcrumbParent="Referrals"
+    breadcrumbCurrent="New referral"
+    [lastSavedLabel]="lastSavedLabel()"
+    [showDraftBadge]="formService.draftStatus() === 'saved'"
+    (discard)="onDiscard()">
+  </app-page-header>
+
+  <!-- Two-column layout -->
+  <div class="referral-form-layout" [formGroup]="form">
+
+    <!-- Left: form -->
+    <div class="referral-form-content">
+
+      <app-info-banner></app-info-banner>
+
+      <!-- ═══ Section 1: Patient ═══ -->
+      <app-section-card
+        [sectionNumber]="1"
+        title="Patient information"
+        subtitle="Who is this referral for?"
+        anchorId="sec-patient">
+
+        <!-- Row 1: Name -->
+        <div class="form-grid" formGroupName="patient">
+          <div class="form-field">
+            <label for="firstName">
+              First name<span class="req" aria-hidden="true">*</span>
+            </label>
+            <input id="firstName" formControlName="firstName" placeholder="Roberto"
+              [class.input--error]="hasError('patient.firstName', 'required')"
+              autocomplete="given-name">
+            <span class="field-error" *ngIf="hasError('patient.firstName', 'required')">
+              First name is required.
+            </span>
+          </div>
+          <div class="form-field">
+            <label for="middleName">Middle</label>
+            <input id="middleName" formControlName="middleName" placeholder="—"
+              autocomplete="additional-name">
+          </div>
+          <div class="form-field">
+            <label for="lastName">
+              Last name<span class="req" aria-hidden="true">*</span>
+            </label>
+            <input id="lastName" formControlName="lastName" placeholder="Martinez"
+              [class.input--error]="hasError('patient.lastName', 'required')"
+              autocomplete="family-name">
+            <span class="field-error" *ngIf="hasError('patient.lastName', 'required')">
+              Last name is required.
+            </span>
+          </div>
+        </div>
+
+        <!-- Row 2: DOB / Sex / Phone -->
+        <div class="form-grid" formGroupName="patient" style="margin-top: 16px;">
+          <div class="form-field">
+            <label for="dateOfBirth">
+              DOB<span class="req" aria-hidden="true">*</span>
+            </label>
+            <div class="input-group">
+              <span class="input-group__icon" aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 20 20" fill="none"
+                  stroke="currentColor" stroke-width="1.8">
+                  <rect x="3" y="5" width="14" height="12" rx="1.5"/>
+                  <path d="M3 9h14M7 3v4M13 3v4"/>
+                </svg>
+              </span>
+              <input id="dateOfBirth" formControlName="dateOfBirth"
+                placeholder="MM / DD / YYYY"
+                [class.input--error]="hasError('patient.dateOfBirth', 'required') || hasError('patient.dateOfBirth', 'dob')">
+            </div>
+            <span class="field-error"
+              *ngIf="hasError('patient.dateOfBirth', 'required') || hasError('patient.dateOfBirth', 'dob')">
+              Enter a valid date MM/DD/YYYY.
+            </span>
+          </div>
+
+          <div class="form-field">
+            <label>Sex</label>
+            <app-chip-select
+              formControlName="sex"
+              [options]="sexOptions"
+              groupLabel="Sex">
+            </app-chip-select>
+          </div>
+
+          <div class="form-field">
+            <label for="phone">
+              Primary phone<span class="req" aria-hidden="true">*</span>
+            </label>
+            <input id="phone" formControlName="phone"
+              placeholder="(512) 555-0100" type="tel"
+              [class.input--error]="hasError('patient.phone', 'required') || hasError('patient.phone', 'phone')"
+              autocomplete="tel">
+            <span class="field-error"
+              *ngIf="hasError('patient.phone', 'required')">
+              Phone is required.
+            </span>
+            <span class="field-error"
+              *ngIf="hasError('patient.phone', 'phone')">
+              Phone number must be 10 digits.
+            </span>
+          </div>
+        </div>
+
+        <!-- Row 3: Email / Contact preference -->
+        <div class="form-grid" formGroupName="patient" style="margin-top: 16px;">
+          <div class="form-field" style="grid-column: span 2;">
+            <label for="email">
+              Email
+              <span class="label__optional">optional</span>
+            </label>
+            <div class="input-group">
+              <span class="input-group__icon" aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 20 20" fill="none"
+                  stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 5h14v10H3z"/>
+                  <path d="M3 6l7 5 7-5"/>
+                </svg>
+              </span>
+              <input id="email" type="email" formControlName="email"
+                placeholder="patient@email.com"
+                [class.input--error]="hasError('patient.email', 'email')"
+                autocomplete="email">
+            </div>
+            <span class="field-error" *ngIf="hasError('patient.email', 'email')">
+              Enter a valid email address.
+            </span>
+          </div>
+
+          <div class="form-field">
+            <label for="preferredContact">Preferred contact</label>
+            <select id="preferredContact" formControlName="preferredContact">
+              <option *ngFor="let opt of contactOptions" [value]="opt">{{ opt }}</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Row 4: Address -->
+        <div class="form-field" formGroupName="patient" style="margin-top: 16px;">
+          <label for="streetAddress">
+            Street address<span class="req" aria-hidden="true">*</span>
+          </label>
+          <input id="streetAddress" formControlName="streetAddress"
+            placeholder="Start typing — we'll auto-complete via USPS"
+            [class.input--error]="hasError('patient.streetAddress', 'required')"
+            autocomplete="street-address">
+          <span class="field-error" *ngIf="hasError('patient.streetAddress', 'required')">
+            Address is required.
+          </span>
+        </div>
+
+      </app-section-card>
+
+      <!-- ═══ Section 2: Order ═══ -->
+      <app-section-card
+        [sectionNumber]="2"
+        title="Order details"
+        subtitle="What equipment or service is being ordered?"
+        anchorId="sec-order">
+
+        <!-- Order type -->
+        <div class="form-field" formGroupName="order">
+          <label>
+            Order type<span class="req" aria-hidden="true">*</span>
+          </label>
+          <app-chip-select
+            formControlName="orderType"
+            [options]="orderTypeOptions"
+            groupLabel="Order type">
+          </app-chip-select>
+          <span class="field-error"
+            *ngIf="hasError('order.orderType', 'required')">
+            Select an order type.
+          </span>
+        </div>
+
+        <!-- HCPCS + NPI -->
+        <div class="form-grid" formGroupName="order" style="margin-top: 16px;">
+          <div class="form-field">
+            <label for="hcpcsCodes">HCPCS code(s)</label>
+            <input id="hcpcsCodes" style="font-family: monospace;" formControlName="hcpcsCodes"
+              placeholder="E0601">
+          </div>
+          <div class="form-field" style="grid-column: span 2;">
+            <label for="physicianNpi">
+              Ordering physician NPI<span class="req" aria-hidden="true">*</span>
+            </label>
+            <input id="physicianNpi" style="font-family: monospace;" formControlName="physicianNpi"
+              placeholder="1234567890"
+              [class.input--error]="hasError('order.physicianNpi', 'required') || hasError('order.physicianNpi', 'npi')">
+            <span class="field-error"
+              *ngIf="hasError('order.physicianNpi', 'required')">
+              NPI is required.
+            </span>
+            <span class="field-error"
+              *ngIf="hasError('order.physicianNpi', 'npi')">
+              NPI must be exactly 10 digits.
+            </span>
+          </div>
+        </div>
+
+        <!-- Clinical notes -->
+        <div class="form-field" formGroupName="order" style="margin-top: 16px;">
+          <label for="clinicalNotes">
+            Clinical notes
+            <span class="label__optional">optional</span>
+          </label>
+          <textarea id="clinicalNotes" formControlName="clinicalNotes"
+            placeholder="Include AHI score, sleep study notes, and any prior device history…"
+            rows="4">
+          </textarea>
+          <span class="field-help" style="font-size: 12px; color: var(--text-subtle); margin-top: 4px; display: block;">
+            Max 2,000 characters. Notes are visible to the assigned branch and billing.
+          </span>
+          <span class="field-error" *ngIf="hasError('order.clinicalNotes', 'maxlength')">
+            Clinical notes cannot exceed 2,000 characters.
+          </span>
+        </div>
+
+        <!-- Fulfillment date + Priority -->
+        <div class="form-grid" formGroupName="order" style="margin-top: 16px;">
+          <div class="form-field">
+            <label for="fulfillmentDate">Requested fulfillment date</label>
+            <input id="fulfillmentDate" type="text" formControlName="fulfillmentDate"
+              placeholder="MM / DD / YYYY">
+          </div>
+          <div class="form-field" style="grid-column: span 2;">
+            <label>Priority</label>
+            <app-chip-select
+              formControlName="priority"
+              [options]="priorityOptions"
+              groupLabel="Priority">
+            </app-chip-select>
+          </div>
+        </div>
+
+      </app-section-card>
+
+      <!-- ═══ Section 3: Insurance ═══ -->
+      <app-section-card
+        [sectionNumber]="3"
+        title="Insurance &amp; routing"
+        subtitle="Where does this go and who's paying for it?"
+        anchorId="sec-insurance">
+
+        <!-- Primary payer + Member ID -->
+        <div class="form-grid" formGroupName="insurance">
+          <div class="form-field">
+            <label for="primaryPayer">
+              Primary payer<span class="req" aria-hidden="true">*</span>
+            </label>
+            <select id="primaryPayer" formControlName="primaryPayer"
+              [class.select--error]="hasError('insurance.primaryPayer', 'required')">
+              <option value="">Select payer…</option>
+              <option *ngFor="let p of payerOptions" [value]="p">{{ p }}</option>
+            </select>
+            <span class="field-error" *ngIf="hasError('insurance.primaryPayer', 'required')">
+              Primary payer is required.
+            </span>
+          </div>
+          <div class="form-field" style="grid-column: span 2;">
+            <label for="memberId">
+              Member ID<span class="req" aria-hidden="true">*</span>
+            </label>
+            <input id="memberId" style="font-family: monospace;" formControlName="memberId"
+              placeholder="XXX000000000"
+              [class.input--error]="hasError('insurance.memberId', 'required')">
+            <span class="field-error" *ngIf="hasError('insurance.memberId', 'required')">
+              Member ID is required.
+            </span>
+          </div>
+        </div>
+
+        <!-- Secondary payer + Branch -->
+        <div class="form-grid" formGroupName="insurance" style="margin-top: 16px;">
+          <div class="form-field">
+            <label for="secondaryPayer">Secondary payer</label>
+            <select id="secondaryPayer" formControlName="secondaryPayer">
+              <option *ngFor="let p of secondaryPayerOptions" [value]="p">{{ p }}</option>
+            </select>
+          </div>
+          <div class="form-field" style="grid-column: span 2;">
+            <label for="assignedBranch">Assigned branch</label>
+            <select id="assignedBranch" formControlName="assignedBranch">
+              <option *ngFor="let b of branchOptions" [value]="b">{{ b }}</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Checkboxes -->
+        <div class="checkboxes" formGroupName="insurance" style="margin-top: 20px; display: flex; flex-direction: column; gap: 12px;">
+          <label class="checkbox-label" style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+            <input type="checkbox" formControlName="runEligibilityCheck" style="width: auto; height: auto;">
+            Run automatic eligibility check on submit
+          </label>
+
+          <label class="checkbox-label" style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+            <input type="checkbox" formControlName="hasPriorAuth" style="width: auto; height: auto;">
+            Patient has prior authorization on file
+          </label>
+        </div>
+
+      </app-section-card>
+
+      <!-- Submit error -->
+      <div class="submit-error" *ngIf="submitError()" role="alert">
+        <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor"
+          stroke-width="1.8" aria-hidden="true">
+          <circle cx="10" cy="10" r="7"/>
+          <path d="M10 7v4M10 13.5v.5"/>
+        </svg>
+        {{ submitError() }}
+      </div>
+
+      <!-- Sticky Footer -->
+      <app-form-footer
+        [requiredFieldsRemaining]="requiredFieldsRemaining()"
+        [isSubmitting]="isSubmitting()"
+        [isSaving]="isSaving()"
+        (cancel)="onCancel()"
+        (saveDraft)="onSaveDraft()"
+        (submitForm)="onSubmit()">
+      </app-form-footer>
+
+    </div>
+
+    <!-- Right: TOC sidebar -->
+    <div class="sticky-sidebar">
+      <app-progress-sidebar
+        [sections]="sections()">
+      </app-progress-sidebar>
+    </div>
+
+  </div>
+</div>

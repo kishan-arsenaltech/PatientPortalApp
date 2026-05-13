@@ -36,6 +36,12 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./features/audit-queue/audit-queue.routes')
             .then(m => m.auditQueueRoutes)
+      },
+      {
+        path: 'referrals',
+        loadChildren: () =>
+          import('./features/referrals/referrals.routes')
+            .then(m => m.referralsRoutes)
       }
     ]
   },

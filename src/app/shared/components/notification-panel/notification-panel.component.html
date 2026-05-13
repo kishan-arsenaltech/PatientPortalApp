@@ -1,0 +1,21 @@
+<div class="notif-panel">
+    <div *ngFor="let notif of notificationService.notifications()" class="notif-item notif-{{ notif.type }}">
+        <div class="notif-body">
+            <div class="notif-icon" [innerHTML]="getIcon(notif.type) | safeHtml"></div>
+            <div class="notif-content">
+                <p class="notif-title">{{ notif.title }}</p>
+                <p class="notif-msg">{{ notif.msg }}</p>
+                <p class="notif-time">{{ notif.time }}</p>
+            </div>
+            <button class="notif-close" aria-label="Dismiss" (click)="notificationService.remove(notif.id)">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"
+                    stroke-linecap="round">
+                    <path d="M3 3l6 6M9 3L3 9" />
+                </svg>
+            </button>
+        </div>
+        <div class="notif-progress">
+            <div class="notif-progress-bar" style="transition: width 5000ms linear; width: 0%;"></div>
+        </div>
+    </div>
+</div>

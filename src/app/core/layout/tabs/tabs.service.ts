@@ -1,20 +1,14 @@
 import { Injectable, signal, effect } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
-
-export interface Tab {
-  id: string;
-  title: string;
-  icon: string;
-  href: string;
-  closable: boolean;
-}
+import { Tab } from '../../models/tab.model';
 
 const REGISTRY: Record<string, Tab> = {
-  dashboard:   { id: 'dashboard',   title: 'Dashboard',   icon: 'home',   href: '/dashboard',   closable: false },
-  inbox:       { id: 'inbox',       title: 'My Inbox',    icon: 'inbox',  href: '/inbox',       closable: true },
-  adherence:   { id: 'adherence',   title: 'Adherence',   icon: 'search', href: '/adherence',   closable: true },
+  dashboard:     { id: 'dashboard',   title: 'Dashboard',   icon: 'home',   href: '/dashboard',   closable: false },
+  inbox:         { id: 'inbox',       title: 'My Inbox',    icon: 'inbox',  href: '/inbox',       closable: true },
+  adherence:     { id: 'adherence',   title: 'Adherence',   icon: 'search', href: '/adherence',   closable: true },
   'audit-queue': { id: 'audit-queue', title: 'Audit Queue', icon: 'check',  href: '/audit-queue', closable: true },
+  'referrals':   { id: 'referrals',   title: 'New Referral', icon: 'file',   href: '/referrals/new', closable: true },
 };
 
 @Injectable({

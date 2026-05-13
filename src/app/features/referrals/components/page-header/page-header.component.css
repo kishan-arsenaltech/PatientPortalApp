@@ -1,0 +1,11 @@
+/* Page header component specific styles */
+.page-header {
+  padding: 2rem 0;
+  border-bottom: 1px solid var(--border-color, #e2e8f0);
+  margin-bottom: 2rem;
+}
+
+.page-header__title {
+  font-size: 1.875rem;
+  font-weight: 700;
+}

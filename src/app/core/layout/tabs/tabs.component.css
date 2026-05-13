@@ -1,1 +1,41 @@
-/* Tabs component specific styles */
+app-tabs {
+    display: block;
+    width: 100%;
+}
+
+.app-tabs {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    min-height: 42px;
+    padding: 0 12px;
+    border-bottom: 1px solid #ddd;
+    background: #fff;
+}
+
+.tab {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.tab-inner {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+}
+
+.tab.active {
+    background: #f3f3f3;
+}
+
+.tab-icon svg {
+    display: block;
+}
+
+.tab-close {
+    display: flex;
+    align-items: center;
+}

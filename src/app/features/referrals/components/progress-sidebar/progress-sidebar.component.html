@@ -1,0 +1,26 @@
+<div class="sidebar-block">
+    <h4 class="sidebar-title">Sections</h4>
+    <nav class="toc" aria-label="Form sections">
+        <div
+          *ngFor="let section of sections"
+          class="item"
+          [class.active]="section.isActive"
+          [class.done]="isDone(section)"
+          (click)="scrollTo(section.anchor)">
+          <span class="dot" aria-hidden="true"></span>
+          <div class="content">
+            <div class="title">{{ section.label }}</div>
+            <div class="meta">{{ getStatusLabel(section) }}</div>
+          </div>
+        </div>
+    </nav>
+</div>
+
+<div class="sidebar-block">
+    <h4 class="sidebar-title">What happens next</h4>
+    <ol class="next-steps">
+        <li><strong>1.</strong> Eligibility check runs automatically.</li>
+        <li><strong>2.</strong> Branch coordinator is notified.</li>
+        <li><strong>3.</strong> Patient receives confirmation SMS.</li>
+    </ol>
+</div>

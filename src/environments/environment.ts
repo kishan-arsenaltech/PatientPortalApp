@@ -1,4 +1,4 @@
 export const environment = {
-  production: true,
-  apiUrl: 'https://api.patientportal.com'
+  production: false,
+  apiUrl: 'https://localhost:9001/api'
 };

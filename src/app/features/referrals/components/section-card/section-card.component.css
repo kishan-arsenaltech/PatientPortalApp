@@ -1,0 +1,17 @@
+/* Section card component specific styles */
+.section-card {
+  background: var(--bg-surface, #ffffff);
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-color, #e2e8f0);
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+
+.section-card__header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border-color, #e2e8f0);
+}
+
+.section-card__content {
+  padding: 1.5rem;
+}
